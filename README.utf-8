@@ -77,7 +77,7 @@ README.jis in ISO-2022-JP for hashida-table
   ありがとうございます。(と小さい手続き = program の割には、大げさですが)。
 
   藤原  誠 
-  (C) 1996 Makoto Fujiwara makoto@komekome.bay.prug.or.jp
+  (C) 1996 Makoto Fujiwara makoto [at] komekome.bay.prug.or.jp
 __END__
   This is prepared by tar + gzip + uuencoded, please uudecode + gunzip + tar
   to use this package. This includes five files.
