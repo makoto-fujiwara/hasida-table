@@ -9,7 +9,7 @@ README for hasida-table
   hashida-table generates PostScript file for tcode 2 stroke table.
   Type 'hashida-table -h' for simple explanation.
   For help, join
-  tcode-ml@is.s.u-tokyo.ac.jp (Tcode Mailing List)
+  tcode-ml [at] is.s.u-tokyo.ac.jp (Tcode Mailing List)
 
 960214
   This is prepared by tar + gzip + uuencoded, please uudecode + gunzip + tar
@@ -18,4 +18,4 @@ README for hasida-table
   portion. The other portion prepared by Fujiwara is freely re-distribu-
   table. After all, Fujiwara understood this package is freely re-distri-
   butale.
- (C) 1996 Makoto Fujiwara makoto@komekome.bay.prug.or.jp
+ (C) 1996 Makoto Fujiwara makoto [at] komekome.bay.prug.or.jp
