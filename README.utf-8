@@ -1,0 +1,95 @@
+README.jis in ISO-2022-JP for hashida-table
+960426
+  hasida-0.6
+  いくつか変更した。
+  hasida-table -j で日本語の説明を表示するようにした。このため、Perl
+  手続きそのものは *euc-japan* で保存する必要があるようになった。
+  その他のものは、 CHANGELOG の方を参照のこと。
+960219
+  いくつか変更しました。
+  -n filename で不要な字(覚えた字や、使わない字)を指定出来る
+  -o とすると RR と LL では不要な側の格子は印刷しない
+  -b とすると、RL の文字を太字で印刷する。
+  aiueo-full-1351.jis という名前の 二打で打てる字を全部含んでいるもの
+  を用意した。
+
+960214
+  あいうえお順に並んだ漢字から tcode の二打を知るための表を以前に橋田
+  さんが作られ、tcode-ml に投稿されました。
+
+| From:        tcode-ml@is.s.u-tokyo.ac.jp (Tcode Mailing List)
+| Subject:     [247:hasida@icot.or.] Re: T-code table in one A3 sheet 
+| Date:        Fri, 07 Feb 1992 11:14:26 JST
+
+  これは LaTeX で書かれたものでしたが、今度は藤原が、二打の表(tcode.st)
+  と欲しい文字を並べたものを読んで、A4 x 2 頁 の PostScript 形式の譜に
+  出力する Perl の手続きを作って見ました。
+  (欲しい文字の数によっては一頁だったり三頁だったりしますが)
+  何も変更しなければ、橋田さんの作られたものと同じ、6 x 51 x 4 = 1224
+  字を印刷します。
+
+  hashida-table -s tcode.st  aiueo.jis > table.ps
+  のように使います。tcode.st と aiueo.jis は ISO-2022-JP の形式である
+  ことを期待しています。使い方は hashida-table -h で一応出るようになっ
+  ています。auieo.jis の最後の改行がない時は一文字余分に出力します。
+  aiueo.jis に相当するものの指定がない時は、標準入力を読みます。
+
+  実行には SPARC station 1 で 40-50 秒、SS-5/110 で 12 秒くらい、
+  印刷にも相当時間がかかります。PS にして 約1MBytes のものが作られます。
+
+  歌代さんの作られた a2ps が出力した PostScript を元に作りました。
+  (Id: a2ps,v 1.37 1995/03/06 11:35:35 utashiro Exp )
+  また付属している aiueo.jis は上に書いてある橋田さんの作られのものから
+  作ったもので、実は元通り「眼」の字が二回出て来ます。但し昭→照は変え
+  てあります。
+
+  PostScript 的にも、Perl 手続的にもとても見られたものではありませんが、
+  一応紙には出ると思います。LaserWriter II NTX-J を使って A4 に印刷を確
+  認しています。NewsPrint というものも試して同じように出ます。版数など
+  は不明です。
+
+  印刷するべきものの大きさが紙一杯なので、周辺の余白の調整が必要かも知
+  れません。気付の点などありましたら、何でもおっしゃって下さい。
+
+  また最近の流行に合わせて●→○となっていますが、変更するのは簡単だと
+  思います。と言っても、まだ指示行(command line)の選択は出来ません。
+
+  万一この包み(package)だけを開けた方のために参考として tcode.st を付け 
+  ましたが、本来は、御自分のお使いのものを使って下さい。
+  
+【謝辞】
+  ・tcode を考えられた山田尚勇先生
+  ・tcode.el を作られた前田  薫さんと斎藤 靖さん
+  ・A3 の紙に二打の表の一覧を作ることが出来ると考え、LaTeX にした橋田浩一さん
+  ・tcode Mailing list と anon ftp をお世話いただいている増原英彦さん
+     (masuhara@is.s.u-tokyo.ac.jp)
+  ・Perl を作った Larry Wall
+  ・Programming Perl を Larry Wall と書いた Randall Schwartz
+  ・それを翻訳された近藤嘉雪さん
+  ・a2ps を作られた歌代さんをはじめとする方々
+  ・ghostscript を提供されている Aladdin Enterprises
+  ・それを日本語化された片山紀生さん
+  ・ghostview を作られた Tim Theisen
+  ・線を細くするのに setlinewidth operator を知らなかったので、赤本の立
+    読みをしても特に何も言わなかった LAOX 千葉ポートタウン店
+  ・いつも夜遅く画面に向っていても文句一つ言わない女房の真由美
+  なしではこの Perl 手続きを書くことは出来なかったでしょう。皆様どうも
+  ありがとうございます。(と小さい手続き = program の割には、大げさですが)。
+
+  藤原  誠 
+  (C) 1996 Makoto Fujiwara makoto@komekome.bay.prug.or.jp
+__END__
+  This is prepared by tar + gzip + uuencoded, please uudecode + gunzip + tar
+  to use this package. This includes five files.
+  hashida-0.1/{hashida-table, aiueo.jis, README, README.jis, tcode.st}
+  There is a2ps code included, please grant the CopyRight notice in that
+  portion. The other portion prepared by Fujiwara is freely re-distribu-
+  table. After all, Fujiwara understood this package is freely re-distri-
+  butale.
+
+  tar | gzip | uuencode してありますので、uudecode | gunzip | tar をし
+  て下さい。
+  hashida-0.1/{hashida-table, aiueo.jis, README, README.jis, tcode.st}
+  が入っています。中には a2ps の出力が含まれています。著作権はそれに従
+  う必要があります。当然のことながら藤原の作った部分は無断再配布可能で
+  す。結果としてこれは無断再配布可能だと理解しています。
