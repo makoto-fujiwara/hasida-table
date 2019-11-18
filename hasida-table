@@ -1,8 +1,8 @@
 #!/usr/bin/perl
-# $Header: /home/makoto/postscript/hasida-0.6/RCS/hasida-table,v 1.3 1996/04/26 22:46:00 makoto Exp $
+# $Header$
 use Getopt::Std;
 
-  $rcsid = q$Id: hasida-table,v 1.3 1996/04/26 22:46:00 makoto Exp $;
+  $rcsid = q$Id: hasida-table,v 0.8 2013/12/15 makoto Exp $;
 #------------ com_leaf for appropriate help message ----
 # command name, strip all before '/' inclusively
 # /home/fujiwara/perl/com_path-test -> com_path-test
@@ -39,7 +39,8 @@ $linesPerColumn = 51   ; # vertical char count
 
 $linesPerColumn--;
 
-getopts('bdf:g:hHjn:ors:', \%opts);  # command line argument
+getopts('bdf:g:hHjn:ors:t', \%opts);  # command line argument
+my ($aiueo) = 'aiueo-full-1351.jis';
 
 # ----------------- help -------------
 if ( $opts{'h'} ) {  &usage ; }
@@ -51,23 +52,29 @@ if ( $opts{'g'} ) { $dot = $opts{'g'} }
 if ( $opts{'s'} ) { $STROKE = $opts{'s'} }
 else          { $STROKE = './tcode.st'; }
 #else          { $STROKE = $ENV{'HOME'}.'/tcode/tc.el/tcode.st'; }
+
 if ( $opts{'H'} ) {
     $opts{'b'}++ ; $opts{'r'}++ ; $opts{'o'}++ ;
     $opts{'f'}   = '/dev/null';
     $opts{'s'}   = './tcode.st';
-    $ARGV[0] = 'aiueo-hasida-1215.jis' ;
-   
+    $aiueo = 'aiueo-hasida-1215.jis' ;
 }
+
 open(STROKE) || die "Problem opening stroke table: $STROKE: $!\n";
 
 if ( $#ARGV > -1 ) { 
     open(STDIN,"$ARGV[0]")  || die "Problem opening $ARGV[0]: $!\n";
+} else {
+    open(STDIN, "$aiueo" )  || die "Problem opening $aiueo: $!\n";
 }
 # --------------------------------------------------
 # read negative file
 # --------------------------------------------------
+our @negative = split ',',$opts{'n'};
 if ( $opts{'n'} )  {
-    open(NEGATIVE,"$opts{'n'}") || die "Problem opening negative file $opts{'n'}: $!\n";
+    my @negative = split ',',$opts{'n'};
+    foreach my $n (@negative) {
+    open(NEGATIVE,"$n") || die "Problem opening negative file $n: $!\n";
     while(<NEGATIVE>) {
 	&removeESC ;
 	if ( /^$/ ) { next ; }
@@ -82,6 +89,7 @@ if ( $opts{'n'} )  {
 	}
     }
     close(NEGATIVE);
+    } # end foreach
 #    print STDERR "\n";
 }
 # --------------------------------------------------
@@ -238,9 +246,12 @@ NEWPAGE
     }
 }
 
-
+if ($opts{'t'}) {
+    statistics();
+}
+print_oneline("$negativecount char omitted.") if ( $opts{'n'} );
+print_oneline("$count char printed.");
 print <<ENDEND;
-
 endpage
 
 %%Trailer
@@ -287,23 +298,25 @@ Where:
   -h   show usage ( This output )
   -H hasida mode, equivalent to -b -r -o -f /dev/null aiueo-1215.jis
   -j   show usage in Japanese
-  -n negative_file ( omitting list, default: None )
+  -n negative_file ( omitting list multiple files maybe specifed with
+     comma separated list (avoid using shell expansion), default: none).
   -o   disable 'No grid for odd side ( not used hand )'
        => get full grid anyway
   -r   reverse, circle -> filled ( default: filled -> circle )
   -v   verbose ( valid only with -c  ( N ) )
   -s stroke_table 
        is the same file as tc-mule.el reads ( tcode.st )
+  -t   print statistics and command line
   aiueo_file         is the name of file which has string of
-               kanji to be appeared in table
-               ( default: read from standard input )
+  kanji to be appeared in table  (default: read from ./$aiueo)
 Note:
   All the Kanji code are expected in JIScode ( ISO-1022-JP ).
   Sequece of chars in file negative, frame can be any order.
   It doesn't matter. The sequece of aiueo_file matters.
-Examle:   
+Example:   
      ( for full 1351 list )
-  $my_leaf -f frame.jis aiueo-full-1351.jis | lpr
+  $my_leaf -f frame.jis | lpr
+  $my_leaf -f frame.jis $aiueo | lpr
      ( put frame, and remove some chars in negative list )
   $my_leaf -f frame.jis -n negative aiueo-full-1351.jis | lpr
      ( for original hasida table, and circle -> filled
@@ -339,23 +352,24 @@ Where:
   -j  使い方(日本語)
   -n  negative
       印刷しない文字が書いてある譜の指定。決して使わない字や、覚えてし
-      まった字を書いておくとそれを表に出さない。
+      まった字を書いておくとそれを表に出さない。カンマでつないで複数も可
   -o  RR,LL の場合、使わない側の格子を印刷する(無指定では印刷しない)
   -r  反転形式。○→● ( 無指定時 ●→○)
   -v  おしゃべり形式 ( -c と供に指定の時だけ有効) (N)
   -s  名前
       打鍵表の指定 tc-mule.el が読む tcode.st を指定する
       ( Unix path の形式で指定 ) 無指定時: ./tcode.st 
+  -t  処理時刻などを Postscript 内にも印刷する
   [aiueo_file]
       印刷したい漢字の一覧が書いてある譜を指定する。
-      無指定時: 標準入力から読む
+      無指定時: ./$aiueo から読む
 Note:
   ここで用いる漢字の譜は全ていわゆる JIScode ( ISO-1022-JP )であること。
   aiueo_file はその中に書いてある順に印刷する。また当然 tcode.st もその
   順序が重要であるが、-n, -f で指定する、省略文字と枠を付ける文字の指定
   は順序は構わない。
   (ただし信じられないことにこの Perl 手続きは *euc-japan* で保存のこと。)
-Examle:   
+Example:   
    tcode で普通に打てる 1351 全てを印刷する。(三頁になる)
   $my_leaf -f frame.jis aiueo-full-1351.jis | lpr
 
@@ -491,6 +505,10 @@ print <<PROLOG;
       grestore
       0 bodyfontsize $linePitch mul neg rmoveto
     } bind def 
+/nlst {
+      grestore
+      0 statfontsize 1.3 mul neg rmoveto
+    } bind def
 /nextcolumn {
 %	 upperx sheetside get  bodymargin 2 div  add sheetwidth 2 div add 
 	 upperx sheetside get                        sheetwidth 2 div add 2 unit sub
@@ -499,6 +517,7 @@ print <<PROLOG;
 	 sub
       moveto
       } def
+
 startdoc
 %%EndProlog
 $linewidth setlinewidth
@@ -508,6 +527,29 @@ $linewidth setlinewidth
 ( --- Hasida  Table --) newfile
 PROLOG
 } 
+# -----------------------------------
+sub statistics(){
+	my $localtime = localtime();
+	print <<START_STAT;
+      gsave
+        statfont setfont
+        cr nl
+START_STAT
+  print_oneline ('');
+  print_oneline($localtime);
+  print_oneline("$aiueo");
+
+  if (@negative) {
+      print_oneline("negative file(s):");
+      foreach my $n (@negative) { print_oneline('  '.$n);}
+  }
+ }
+ sub print_oneline($) {
+  my $line = shift;
+  print "bl ($line) s nlst\n";
+}
+# -----------------------------------
+
 # $Log: hasida-table,v $
 # Revision 1.3  1996/04/26  22:46:00  makoto
 # -H added for hasida mode, change default path for -s
@@ -611,6 +653,7 @@ statusdict /a4tray known { statusdict begin a4tray end } if
 /nofooter true def
 /nopunchmark true def
 /bodyfontsize 16 def
+/statfontsize 8 def
 /kanjiAsciiRatio 1 def
 /lines 41 def
 /columns 52 def
@@ -700,9 +743,10 @@ ifelse
 /footerfont /Helvetica-Bold datefontsize getfont def
 /mag { doasciimag { [ 1 0 0 asciimagsize 0 0 ] makefont } if } def
 /bodynfont /Courier bodyfontsize getfont mag def
+/statfont  /Courie statfontsize getfont mag def
 /bodybfont /Courier-Bold bodyfontsize getfont mag def
 /bodyofont /Courier-BoldOblique bodyfontsize getfont mag def
-/fontarray [ bodynfont bodybfont bodyofont ] def
+/fontarray [ statfont bodynfont bodybfont bodyofont ] def
 /bodyfont bodynfont def
 
 % Initializing kanji fonts
@@ -1040,3 +1084,6 @@ ENDPSENDPS
 %     +<--------->+ $kanjiOffset = 4
 %                    +<------------>+ $rightOffset = 5
 %     +<------------------------------------------->+ $nextChar = 15.5
+Local Variables:
+outline-regexp: "^[ 	]*sub\\s-+\\([-[:alnum:]+_:]+\\)\\|^\\(?:my\\|our\\)\\s-+\\([$@%][-[:alnum:]+_:]+\\)\\s-*=\\|^[ 	]*package\\s-+\\([-[:alnum:]+_:]+\\);\\|^=head[0-9][ 	]+\\(.*\\)\\|^=cut\\>\\|^Local \\|^/\\|%!"
+End:
