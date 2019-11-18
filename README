@@ -1,0 +1,21 @@
+README for hasida-table
+960426
+  renamed as hasida-table. for another changes see CHANGELOG
+  for ftp:
+     ftp://utsun.s.u-tokyo.ac.jp/tcode
+  Web access ( in Japanese ):
+     http://www.st.rim.or.jp/~tarokawa/tcode
+960229
+  hashida-table generates PostScript file for tcode 2 stroke table.
+  Type 'hashida-table -h' for simple explanation.
+  For help, join
+  tcode-ml@is.s.u-tokyo.ac.jp (Tcode Mailing List)
+
+960214
+  This is prepared by tar + gzip + uuencoded, please uudecode + gunzip + tar
+  to use this package.
+  There is a2ps code included, please grant the CopyRight notice in that
+  portion. The other portion prepared by Fujiwara is freely re-distribu-
+  table. After all, Fujiwara understood this package is freely re-distri-
+  butale.
+ (C) 1996 Makoto Fujiwara makoto@komekome.bay.prug.or.jp

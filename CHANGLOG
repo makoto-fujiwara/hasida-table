@@ -1,0 +1,28 @@
+960426 hasida-0.6
+   rename as hasida
+   new options 
+    -j   Japanese help
+    -g   for grid dot size
+    -H   Hasida mode ( classic mode )
+   function modification
+     default grid dot 0.2 pt -> 0.3 pt
+     put frame on new line if -f not said
+     putting frame for any succeeding char on aiueo_file
+     ( when negative/frame struggles)
+   others
+     perl code in *euc-japan* 
+     put %  comment in prologue 
+
+960229 hashida-0.5
+   -r added for white -> black sequence
+960228 hashida-0.4
+   -f for frame char file
+   -b, -o logic reversed
+960219 hashida-0.3
+   new options (-n negative) (-b bold font for RL) (-o odd side only)
+   add aiueo-full-1351.jis
+960218 hashida-0.2
+   setlinewidth was missing on /double, double on second page
+   was filled out by thick line.
+960214 hashida-0.1
+   Initial version
